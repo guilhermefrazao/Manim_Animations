@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/3977891868_1703504961_3481380946.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_1663798368_3481380946.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_118436595_3481380946.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_3201849554_631829896.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_2276068630_622240751.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_2349816757_1909981450.mp4'
+file 'file:C:/Users/guilh/manimations/media/videos/transforms/1080p60/partial_movie_files/TwoTransforms/2852726489_3639325809_2692739811.mp4'
