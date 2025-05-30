@@ -3,11 +3,12 @@ import manim
 import scipy.signal
 import itertools as it
 
+from manim import DecimalMatrix
 from PIL import Image
 from manim import *
 
 
-class ImageConvolution(Scene):
+class ImageConvolution(ThreeDScene):
     image_name = "images/Lula_imposto"
     image_height = 6.0
     kernel_tex = None
@@ -137,7 +138,7 @@ class ImageConvolution(Scene):
         ca = self.conv_array
         FRAME_HEIGHT = 837
         FRAME_WIDTH = 1184  
-        frame = self.camera.frame
+        frame = self.camera.frame_center  
         curr_center = frame.get_center().copy()
         index = int(self.index_tracker.get_value())
         new_center = ca[index].get_center()
@@ -145,7 +146,7 @@ class ImageConvolution(Scene):
 
         target_height = 1.5 * ka.get_height()
         height_func = bezier([
-            frame.get_height(), frame.get_height(), FRAME_HEIGHT,
+            frame.shape[0], frame.shape[0], FRAME_HEIGHT,
             target_height, target_height,
         ])
         self.play(
@@ -156,7 +157,7 @@ class ImageConvolution(Scene):
 
     def reset_frame(self, run_time=2):
         self.play(
-            self.camera.frame.animate.to_default_state(),
+            self.camera.frame_center.animate.to_default_state(),
             run_time=run_time
         )
 
@@ -164,7 +165,7 @@ class ImageConvolution(Scene):
         # Setup sum
         ka = self.kernel_array
         pa = self.pixel_array
-        frame = self.camera.frame
+        frame = self.camera.frame_center
         FRAME_HEIGHT = 837
         FRAME_WIDTH = 1184  
 
@@ -173,7 +174,7 @@ class ImageConvolution(Scene):
         expr = VGroup()
 
         ka_copy = VGroup()
-        stroke_width = 2 * FRAME_HEIGHT / frame.get_height()
+        stroke_width = 2 * FRAME_HEIGHT / frame.shape[0]
 
         lil_height = 1.0
         for square in ka:
@@ -182,7 +183,7 @@ class ImageConvolution(Scene):
             pixel = pa[np.argmin([np.linalg.norm(p.get_center() - sc) for p in pa])]
             color = pixel.get_fill_color()
             rgb = color_to_rgb(color)
-            rgb_vect = DecimalMatrix(rgb.reshape((3, 1)), num_decimal_places=2)
+            rgb_vect = DecimalMatrix(rgb.reshape((3, 1)))
             rgb_vect.set_height(lil_height)
             rgb_vect.set_color(color)
             if np.linalg.norm(rgb) < 0.1:
@@ -223,6 +224,7 @@ class ImageConvolution(Scene):
         top_bar = FullScreenRectangle().set_fill(BLACK, 1)
         top_bar.set_height(rgb_vects.get_height() + 0.5, stretch=True, about_edge=UP)
         top_bar.fix_in_frame()
+        self.add_fixed_in_frame_mobjects(top_bar)
 
         self.play(
             frame.animate.scale(1.2, about_edge=DOWN),
@@ -260,10 +262,11 @@ class GaussianBluMario(ImageConvolution):
         # Gauss surface
         kernel_array = self.kernel_array
 
+        axes = Axes(x_range=[0, 1, 0.1], y_range=[0, 2, 0.2])
+
         gaussian = ParametricFunction(
-            lambda u: (u*2),
-            t_range=(0, 1),
-            scaling=(101, 101),
+            lambda t: axes.c2p(t, 2 * t),   
+            t_range=(0, 1),     
         )
 
         gaussian.set_color(BLUE, 0.8)
@@ -273,7 +276,7 @@ class GaussianBluMario(ImageConvolution):
 
         self.play(
             FadeIn(gaussian),
-            kernel_array.animate.reorient(10, 70),
+            kernel_array.animate.rotate(PI / 4, axis=OUT),
             run_time=3
         )
         self.wait()
