@@ -121,11 +121,10 @@ class PoolingImagem(MovingCameraScene):
                 r.set_fill(color=TEAL, opacity=0.1)
                 r.move_to(np.array([j, -i, 0]) * 0.3)
                 overlay.add(r)
-                idxs.append(j)
-                
-        print("idex", idxs)
-        centros = [grid_original[i].get_center() for i in idxs]
-        centro_medio = sum(centros) / 4
+            idxs.append([n + (i * n_cols) for n in range(0, pool_size+1)])        
+            print("ixds", idxs)
+            centros = [grid_original[i].get_center() for i in idxs[i]]
+            centro_medio = sum(centros) / 8
 
         overlay.move_to(centro_medio)
         return overlay
