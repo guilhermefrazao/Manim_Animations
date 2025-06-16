@@ -29,8 +29,14 @@ class OneShotLearning(MovingCameraScene):
 
         oneShotGroup = Group(imagem1,imagem2,imagem3).arrange(DOWN, buff=1).to_edge(LEFT).shift(LEFT * 3)
 
-        newImageGroup = Group(imagem4)
+        newImageGroup = Group(imagem4).move_to(ORIGIN)
 
         self.play(FadeIn(oneShotGroup, title))
-        self.wait(2)
+        self.wait(5)
+        self.play(FadeIn(newImageGroup))
+        self.wait(5)
         self.play(FadeOut(oneShotGroup))
+
+        #Similarity Function
+
+        #Adicionar essa função de similaridade para uma rede cnn
