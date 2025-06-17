@@ -1,6 +1,10 @@
 from manim import *
 from PIL import Image
 
+config.pixel_height = 1080
+config.pixel_width = 1920
+config.frame_rate = 60
+
 class OneShotLearning(MovingCameraScene):
     def construct(self):
         #Introduction
@@ -56,7 +60,7 @@ class OneShotLearning(MovingCameraScene):
 
         #Similarity Function
 
-        title_similarity = Text("Similatiry Function", font_size=48)
+        title_similarity = Text("Similatiry Function (Cossine Similarity) > threashold = 0.9", font_size=48)
         title_similarity.to_edge(UP).shift(UP * 1.2)
         
         img1 = Image.open("images/Bolsonaro_Camisa.jpeg")
@@ -78,38 +82,36 @@ class OneShotLearning(MovingCameraScene):
         cnn = Rectangle(width=2, height=3).set_fill(GRAY, opacity=0.3)
         cnn_text = Text("CNN").scale(0.7).move_to(cnn.get_center())
 
-        SimilarityGroup = Group(img1, img2, img3).arrange(DOWN, buff=1).to_edge(LEFT).shift(LEFT * 3)
+        SimilarityGroup = Group(img1, img2, img3).arrange(DOWN, buff=1).to_edge(LEFT).shift(LEFT * 1)
 
-        arrow1 = Arrow(img1.get_right(), cnn.get_left() + UP * 0.5)
         arrow2 = Arrow(img2.get_right(), cnn.get_left() + DOWN * 0.5)
         arrow3 = Arrow(img3.get_right(), cnn.get_left() + DOWN * 1)
 
-        feature1 = Rectangle(height=0.5, width=1.5).set_fill(BLUE, opacity=0.5).shift(RIGHT * 4 + UP)
-        feature2 = Rectangle(height=0.5, width=1.5).set_fill(GREEN, opacity=0.5).shift(RIGHT * 4 + DOWN)
-        feature3 = Rectangle(height=0.5, width=1.5).set_fill(GREEN, opacity=0.5).shift(RIGHT * 4 + DOWN * 3)
+        feature2 = Rectangle(height=1, width=2).set_fill(GREEN, opacity=0.5).shift(RIGHT * 4 + UP)
+        feature3 = Rectangle(height=1, width=2).set_fill(GREEN, opacity=0.5).shift(RIGHT * 4 + DOWN * 3)
 
-        feat_label1 = Text("f1").scale(0.5).move_to(feature1)
-        feat_label2 = Text("f2").scale(0.5).move_to(feature2)
-        feat_label3 = Text("f3").scale(0.5).move_to(feature3)
+        featuresGroup = Group(feature2, feature3).arrange(DOWN, buff=1).to_edge(RIGHT).shift(RIGHT * 1)
 
-        arrow_feat1 = Arrow(cnn.get_right() + UP * 0.5, feature1.get_left())
-        arrow_feat2 = Arrow(cnn.get_right() + DOWN * 0.5, feature2.get_left())
-        arrow_feat3 = Arrow(cnn.get_right() + DOWN * 2, feature3.get_left())
+        arrow_feat2 = Arrow(cnn.get_right(), feature2.get_left())
+        arrow_feat3 = Arrow(cnn.get_right() + DOWN * 1, feature3.get_left())
+
+        feat_label2 = MathTex("66\\%\\text { accuracy}").scale(0.5).move_to(feature2)
+        feat_label3 = MathTex("21\\%\\text { accuracy}").scale(0.5).move_to(feature3)
 
         similarity_text = MathTex(r"Similarity = \frac{f_1 \cdot f_2}{\|f_1\| \|f_2\|}")
         similarity_text.scale(0.7).move_to(DOWN * 2)
 
-        result = Text("Pocentagem de match").scale(1).next_to(similarity_text, DOWN)
+        result = Text("Siamese Network").scale(1).next_to(similarity_text, DOWN)
 
         self.play(FadeIn(SimilarityGroup, title_similarity))
         self.wait(0.5)
 
         self.play(FadeIn(cnn, cnn_text))
-        self.play(GrowArrow(arrow1), GrowArrow(arrow2), GrowArrow(arrow3))
+        self.play(GrowArrow(arrow2), GrowArrow(arrow3))
         self.wait(0.5)
 
-        self.play(GrowArrow(arrow_feat1), GrowArrow(arrow_feat2), GrowArrow(arrow_feat3))
-        self.play(FadeIn(feature1, feature2, feature3,  feat_label1, feat_label2, feat_label3))
+        self.play(GrowArrow(arrow_feat2), GrowArrow(arrow_feat3))
+        self.play(FadeIn(featuresGroup, feat_label2, feat_label3))
         self.wait(0.5)
 
         self.play(Write(similarity_text))
@@ -119,3 +121,4 @@ class OneShotLearning(MovingCameraScene):
         self.wait(2)
 
         #Adicionar essa função de similaridade para uma rede cnn e verificar os resultados, estudar como funciona a similaridade e estudar os outros vídeos
+
